@@ -2,6 +2,7 @@ package com.tuacy.guava.study.concurrent;
 
 import com.google.common.base.Function;
 import com.google.common.util.concurrent.*;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Test;
 
@@ -39,9 +40,11 @@ public class GuavaConcurrencyTest {
 				return "任务正常结束";
 			}
 		});
+		// 执行任务
 		Executors.newCachedThreadPool().execute(futureTask);
-
+		// futureTask转换成ListenableFuture
 		ListenableFuture<String> listenableFuture = JdkFutureAdapters.listenInPoolThread(futureTask);
+		// 监听返回结果
 		Futures.addCallback(listenableFuture, new FutureCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
@@ -71,6 +74,7 @@ public class GuavaConcurrencyTest {
 	public void listenableFutureTaskCreateTest() {
 
 		final CountDownLatch latch = new CountDownLatch(2);
+		// Callable转换成ListenableFutureTask
 		ListenableFutureTask<String> listenableFutureTask1 = ListenableFutureTask.create(new Callable<String>() {
 			@Override
 			public String call() throws Exception {
@@ -79,8 +83,10 @@ public class GuavaConcurrencyTest {
 				return "我是正常的";
 			}
 		});
+		// 线程池里面执行任务
 		//		Executors.newCachedThreadPool().execute(listenableTask);
 		sService.execute(listenableFutureTask1);
+		// 监听返回结果
 		Futures.addCallback(listenableFutureTask1, new FutureCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
@@ -95,6 +101,7 @@ public class GuavaConcurrencyTest {
 			}
 		}, MoreExecutors.directExecutor());
 
+		// Runnable转换成ListenableFutureTask
 		ListenableFutureTask<String> listenableFutureTask2 = ListenableFutureTask.create(new Runnable() {
 			@Override
 			public void run() {
