@@ -19,7 +19,7 @@ import java.util.concurrent.FutureTask;
  * @version: 1.0
  * @Description:
  */
-public class GuavaConcurrencyTest {
+public class ConcurrencyTest {
 
 	//定义一个线程池，用于处理所有任务 -- MoreExecutors
 	private final static ListeningExecutorService sService = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
