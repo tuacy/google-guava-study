@@ -1,7 +1,6 @@
 package com.tuacy.guava.study.string;
 
 import com.google.common.base.CharMatcher;
-
 import org.junit.Test;
 
 /**
@@ -47,5 +46,17 @@ public class CharMatcherTest {
 		// 非字母的Matcher negate()规则相反
 		CharMatcher notLetterMatcher = letterMatcher.negate();
 		System.out.println(notLetterMatcher.retainFrom("abcABC123"));
+	}
+
+	@Test
+	public void indexInTest() {
+
+		// 创建了一个只匹配a字母的Matcher
+		CharMatcher letterMatcher = CharMatcher.is('a');
+		// 非字母的Matcher negate()规则相反
+		int aStartIndex = letterMatcher.indexIn("123abcabc");
+		int aEndIndex = letterMatcher.lastIndexIn("123abcabc");
+		System.out.println("a第一次出现的位置：" + aStartIndex);
+		System.out.println("a最后一次出现的位置：" + aEndIndex);
 	}
 }
