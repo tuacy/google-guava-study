@@ -22,9 +22,10 @@ public class TypeTokenTest {
         ArrayList<Integer> intList = Lists.newArrayList();
         System.out.println("intList type is " + intList.getClass());
         System.out.println("stringList type is " + stringList.getClass());
+
+
         // 认为stringList和intList的类型是一样的。这就是所谓的泛型类型擦除, 泛型String和Integer被檫除了。
         System.out.println(stringList.getClass().isAssignableFrom(intList.getClass()));
-
 
         // 定义了一个空的匿名类
         TypeToken<ArrayList<String>> typeToken = new TypeToken<ArrayList<String>>() {
@@ -33,11 +34,6 @@ public class TypeTokenTest {
         TypeToken<?> genericTypeToken = typeToken.resolveType(ArrayList.class.getTypeParameters()[0]);
         System.out.println(genericTypeToken.getType());
 
-
-        TypeToken<Function<Integer, String>> funToken = new TypeToken<Function<Integer, String>>() {
-        };
-        TypeToken<?> funResultToken = funToken.resolveType(Function.class.getTypeParameters()[1]);
-        System.out.println(funResultToken.getType());
     }
 
 }
