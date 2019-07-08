@@ -1,6 +1,5 @@
 package com.tuacy.guava.study.reflection;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import org.junit.Test;
