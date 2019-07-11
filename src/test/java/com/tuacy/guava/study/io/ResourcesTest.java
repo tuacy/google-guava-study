@@ -15,8 +15,7 @@ public class ResourcesTest {
     @Test
     public void getResourceTest() {
         System.out.println(Resources.getResource("application.yml"));
-
-        System.out.println(Resources.getResource(ResourcesTest.class, "./application.yml"));
+        System.out.println(Resources.getResource(ResourcesTest.class, "ResourcesTest.class"));
     }
 
 }
