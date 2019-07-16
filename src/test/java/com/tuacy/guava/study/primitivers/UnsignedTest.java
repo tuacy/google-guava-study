@@ -1,6 +1,6 @@
 package com.tuacy.guava.study.primitivers;
 
-import com.google.common.primitives.UnsignedInteger;
+import com.google.common.primitives.UnsignedLong;
 import org.junit.Test;
 
 /**
@@ -15,11 +15,10 @@ public class UnsignedTest {
     @Test
     public void unsignedIntegerTest() {
 
-        UnsignedInteger unsignedInteger = UnsignedInteger.fromIntBits(-10);
+        UnsignedLong unsignedInteger = UnsignedLong.valueOf("11111111111111111111111111111111", 2);
+        System.out.println("value = " + unsignedInteger.longValue());
 
-        System.out.println("value = " + unsignedInteger.intValue());
-
-        Integer integer = Integer.parseUnsignedInt("2147483648", 10);
+        Integer integer = Integer.parseUnsignedInt("01111111111111111111111111111111", 2);
         System.out.println("unsigned int = " + integer.intValue());
 
     }
