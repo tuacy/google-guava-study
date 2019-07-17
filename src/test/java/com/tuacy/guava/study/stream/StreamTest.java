@@ -10,12 +10,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
-import java.util.function.BiPredicate;
+import java.util.Optional;
 import java.util.function.BinaryOperator;
-import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -124,6 +124,7 @@ public class StreamTest {
         }
     }
 
+    // 归约
     @Test
     public void reduce() {
         Stream<Integer> stream = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -137,6 +138,35 @@ public class StreamTest {
             }
         });
         System.out.println(reduceValue);
+    }
+
+    @Test
+    public void collectList() {
+        Stream<Integer> stream = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        List<Integer> intList = stream.collect(Collectors.toList());
+    }
+
+    @Test
+    public void collectCounting() {
+        Stream<Integer> stream = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        Long count = stream.collect(Collectors.counting());
+    }
+
+    @Test
+    public void collectMaxBy() {
+        Stream<Integer> stream = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        Optional<Integer> ret = stream.collect(Collectors.maxBy(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1 - o2;
+            }
+        }));
+    }
+
+    @Test
+    public void collectMap() {
+        Stream<Integer> stream = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+//        List<Integer> intList = stream.collect(Collectors.toMap());
     }
 
 }
