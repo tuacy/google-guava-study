@@ -14,6 +14,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -101,10 +102,10 @@ public class StreamTest {
         Path path = Paths.get("D:\\job\\git\\google-guava-study\\src\\main\\resources");
         try {
             // 找到指定path下的所有不是目录的文件
-           Stream<Path> stream = Files.find(path, 2, (path1, basicFileAttributes) -> {
-               // 过滤掉目录文件
-               return !basicFileAttributes.isDirectory();
-           });
+            Stream<Path> stream = Files.find(path, 2, (path1, basicFileAttributes) -> {
+                // 过滤掉目录文件
+                return !basicFileAttributes.isDirectory();
+            });
             // TODO: 对流对象做处理
         } catch (IOException e) {
             e.printStackTrace();
@@ -121,6 +122,21 @@ public class StreamTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void reduce() {
+        Stream<Integer> stream = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        // 所有的元素相加，在加上20
+        Integer reduceValue = stream.reduce(20, new BinaryOperator<Integer>() {
+            @Override
+            public Integer apply(Integer integer, Integer integer2) {
+                System.out.println(integer);
+                System.out.println(integer2);
+                return integer + integer2;
+            }
+        });
+        System.out.println(reduceValue);
     }
 
 }
