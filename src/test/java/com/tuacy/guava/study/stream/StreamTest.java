@@ -28,6 +28,23 @@ import java.util.stream.Stream;
 public class StreamTest {
 
     @Test
+    public void streamBuild() {
+
+        Stream.Builder<Integer> build = Stream.<Integer>builder().add(1)
+                .add(2)
+                .add(3);
+        build.accept(4);
+        build.accept(5);
+        build.build().forEach(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) {
+                System.out.println(integer);
+            }
+        });
+        // TODO: 对流对象做处理
+    }
+
+    @Test
     public void collectionStream() {
 
         List<Integer> list = Lists.newArrayList(1, 2, 3, 4, 5);
