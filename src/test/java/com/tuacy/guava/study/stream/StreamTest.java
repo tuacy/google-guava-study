@@ -397,6 +397,59 @@ public class StreamTest {
 
     }
 
+    @Test
+    public void toMap() {
+        List<Student> list = Arrays.asList(new Student("吴六", 26), new Student("张三", 26), new Student("李四", 27));
+        Map<Integer, List<Student>> ret = list.stream()
+                .collect(Collectors.toMap(
+                        // key
+                        new Function<Student, Integer>() {
+                            @Override
+                            public Integer apply(Student student) {
+                                return student.getAge();
+                            }
+                        },
+                        // value
+                        new Function<Student, List<Student>>() {
+
+
+                            @Override
+                            public List<Student> apply(Student student) {
+                                return Lists.newArrayList(student);
+                            }
+                        },
+                        // 有系统key的value怎么处理
+                        new BinaryOperator<List<Student>>() {
+
+                            @Override
+                            public List<Student> apply(List<Student> students, List<Student> students2) {
+                                students.addAll(students2);
+                                return students;
+                            }
+                        }));
+
+        for (Map.Entry<Integer, List<Student>> entry : ret.entrySet()) {
+            Integer mapKey = entry.getKey();
+            List<Student> mapValue = entry.getValue();
+            System.out.println(mapKey + ":" + mapValue);
+        }
+
+    }
+
+    @Test
+    public void summarizingInt() {
+        List<Integer> list = Arrays.asList(1, 2, 3);
+        IntSummaryStatistics ret = list.stream()
+                .collect(Collectors.summarizingInt(
+                        new ToIntFunction<Integer>(){
+                            @Override
+                            public int applyAsInt(Integer value) {
+                                return value;
+                            }
+                        }));
+        System.out.println(ret.getAverage());
+    }
+
 
     private static class Student {
         private String name;
