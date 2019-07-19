@@ -1,6 +1,7 @@
 package com.tuacy.guava.study.stream;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 
@@ -9,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -46,7 +48,7 @@ public class StreamTest {
         // TODO: 对流对象做处理
 
         // Stream.of() 构造一个Steam对象。
-        Stream<Integer> ofSteam = Stream.of(1,2,3,4,5,6);
+        Stream<Integer> ofSteam = Stream.of(1, 2, 3, 4, 5, 6);
         // TODO: 对流对象做处理
 
         // Stream.iterate() 流式迭代器 Stream.iterate()函数的第二个参数告诉你怎么去生成下一个元素
@@ -59,6 +61,7 @@ public class StreamTest {
                         return bigInteger.add(BigInteger.ONE);
                     }
                 });
+        // 简单输出
         integers.limit(10).forEach(new Consumer<BigInteger>() {
             @Override
             public void accept(BigInteger bigInteger) {
@@ -73,6 +76,7 @@ public class StreamTest {
                 return java.lang.Math.random() * 100;
             }
         });
+        // 简单输出前10个值
         generateA.limit(10).forEach(new Consumer<Double>() {
             @Override
             public void accept(Double bigInteger) {
@@ -177,7 +181,190 @@ public class StreamTest {
         }
     }
 
-    // 归约
+    // 过滤
+    @Test
+    public void filter() {
+        Stream<Integer> stream = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        // 过滤出偶数
+        Stream<Integer> filterStream = stream.filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(Integer integer) {
+                return integer % 2 == 0;
+            }
+        });
+        // 简单输出
+        filterStream.forEach(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) {
+                System.out.println(integer);
+            }
+        });
+    }
+
+    // 转换
+    @Test
+    public void map() {
+        Stream<Integer> stream = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        // 整数转换为String
+        Stream<String> mapStream = stream.map(new Function<Integer, String>() {
+            @Override
+            public String apply(Integer integer) {
+                return String.valueOf(integer);
+            }
+        });
+        // 简单输出
+        mapStream.forEach(new Consumer<String>() {
+            @Override
+            public void accept(String integer) {
+                System.out.println(integer);
+            }
+        });
+    }
+
+    // 转换
+    @Test
+    public void mapToInt() {
+        Stream<Integer> stream = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        // 整数转换为String
+        IntStream mapStream = stream.mapToInt(new ToIntFunction<Integer>() {
+
+            @Override
+            public int applyAsInt(Integer value) {
+                return value == null ? 0 : value;
+            }
+        });
+        // 简单输出总和
+        System.out.println(mapStream.sum());
+    }
+
+    // 转换
+    @Test
+    public void flatMap() {
+        Stream<String> stream = Stream.of("java:1", "android:2", "ios:3");
+        // 整数转换为String
+        Stream<String> rerStream = stream.flatMap(
+                new Function<String, Stream<String>>() {
+                    @Override
+                    public Stream<String> apply(String s) {
+                        // 分割
+                        Iterable<String> iterableList = Splitter.on(':').trimResults() // 移除前面和后面的空白
+                                .omitEmptyStrings()
+                                .split(s);
+                        return Lists.newArrayList(iterableList).parallelStream();
+                    }
+                });
+        // 简单输出
+        rerStream.forEach(new Consumer<String>() {
+            @Override
+            public void accept(String integer) {
+                System.out.println(integer);
+            }
+        });
+    }
+
+    // 转换
+    @Test
+    public void flatMapToInt() {
+        Stream<String> stream = Stream.of("1", "2", "3");
+        IntStream rerStream = stream.flatMapToInt(
+                new Function<String, IntStream>() {
+                    @Override
+                    public IntStream apply(String s) {
+                        return IntStream.of(Integer.parseInt(s));
+                    }
+                });
+        // 简单输出总和
+        System.out.println(rerStream.sum());
+    }
+
+    // 去重
+    @Test
+    public void distinct() {
+        Stream<Integer> stream = Stream.of(1,2,3,1,2,3,1,2,3);
+        Stream<Integer> rerStream = stream.distinct();
+        // 简单输出
+        rerStream.forEach(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) {
+                System.out.println(integer);
+            }
+        });
+    }
+
+    // 排序
+    @Test
+    public void sorted() {
+        Stream<Integer> stream = Stream.of(1,2,3,2,5,4,8,6);
+        Stream<Integer> rerStream = stream.sorted(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                if (o1.equals(o2)) {
+                    return 0;
+                } else {
+                    return o1 > o2 ? 1 : -1;
+                }
+            }
+        });
+        // 简单输出
+        rerStream.forEach(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) {
+                System.out.println(integer);
+            }
+        });
+    }
+
+    // 查看
+    @Test
+    public void peek() {
+        Stream<Integer> stream = Stream.of(1,2,3,1,2,3,1,2,3);
+        // 查看
+        Stream<Integer> reStream = stream.peek(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) {
+                System.out.println(integer);
+            }
+        });
+        // 简单输出
+        reStream.forEach(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) {
+                System.out.println(integer);
+            }
+        });
+    }
+
+    // limit
+    @Test
+    public void limit() {
+        Stream<Integer> stream = Stream.of(1,2,3,1,2,3,1,2,3);
+        // limit
+        Stream<Integer> reStream = stream.limit(3);
+        // 简单输出
+        reStream.forEach(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) {
+                System.out.println(integer);
+            }
+        });
+    }
+
+    // skip
+    @Test
+    public void skip() {
+        Stream<Integer> stream = Stream.of(1,2,3,1,2,3,1,2,3);
+        // skip
+        Stream<Integer> reStream = stream.skip(3);
+        // 简单输出
+        reStream.forEach(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) {
+                System.out.println(integer);
+            }
+        });
+    }
+
+    // 转换
     @Test
     public void reduce() {
         Stream<Integer> stream = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
