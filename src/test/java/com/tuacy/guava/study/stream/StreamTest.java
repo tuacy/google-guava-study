@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,6 +31,7 @@ public class StreamTest {
     @Test
     public void streamBuild() {
 
+        // Stream.builder()构造一个Stream对象
         Stream.Builder<Integer> build = Stream.<Integer>builder().add(1)
                 .add(2)
                 .add(3);
@@ -42,6 +44,41 @@ public class StreamTest {
             }
         });
         // TODO: 对流对象做处理
+
+        // Stream.of() 构造一个Steam对象。
+        Stream<Integer> ofSteam = Stream.of(1,2,3,4,5,6);
+        // TODO: 对流对象做处理
+
+        // Stream.iterate() 流式迭代器 Stream.iterate()函数的第二个参数告诉你怎么去生成下一个元素
+        Stream<BigInteger> integers = Stream.iterate(
+                BigInteger.ONE,
+                new UnaryOperator<BigInteger>() {
+
+                    @Override
+                    public BigInteger apply(BigInteger bigInteger) {
+                        return bigInteger.add(BigInteger.ONE);
+                    }
+                });
+        integers.limit(10).forEach(new Consumer<BigInteger>() {
+            @Override
+            public void accept(BigInteger bigInteger) {
+                System.out.println(bigInteger.intValue());
+            }
+        });
+
+        // Stream.generate() 生成无限流
+        Stream<Double> generateA = Stream.generate(new Supplier<Double>() {
+            @Override
+            public Double get() {
+                return java.lang.Math.random() * 100;
+            }
+        });
+        generateA.limit(10).forEach(new Consumer<Double>() {
+            @Override
+            public void accept(Double bigInteger) {
+                System.out.println(bigInteger.intValue());
+            }
+        });
     }
 
     @Test
