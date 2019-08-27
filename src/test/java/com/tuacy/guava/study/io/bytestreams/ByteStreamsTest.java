@@ -5,9 +5,24 @@ import com.google.common.io.Resources;
 import org.junit.Test;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.net.URL;
 
 public class ByteStreamsTest {
+
+    @Test
+    public void byteTest() {
+
+        byte[] ivalue = new byte[1];
+        ivalue[0] = (byte) 170;
+        System.out.println(ivalue[0] == (byte)0xaa);
+//        String binaryString = Integer.toBinaryString(ivalue);
+        System.out.println(new BigInteger(1, ivalue).toString(16));
+
+//        System.out.println(0b10101010);
+
+    }
+
 
     // ByteStreams.copy()方法,数据拷贝
     @Test
